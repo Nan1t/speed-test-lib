@@ -1,4 +1,5 @@
-apply plugin: 'com.github.dcendents.android-maven'
+//apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
 group 'fr.bmartel'
@@ -73,39 +74,84 @@ bintray {
     }
 }
 
-install {
-    repositories.mavenInstaller {
-        pom {
-            project {
-                description 'Speed Test library for Java/Android'
-                packaging 'jar'
-                name 'jspeedtest'
-                url siteUrl
+//install {
+//    repositories.mavenInstaller {
+//        pom {
+//            project {
+//                description 'Speed Test library for Java/Android'
+//                packaging 'jar'
+//                name 'jspeedtest'
+//                url siteUrl
+//                licenses {
+//                    license {
+//                        name 'The MIT License'
+//                        url 'https://github.com/bertrandmartel/speed-test-lib/blob/master/LICENSE.md'
+//                    }
+//                }
+//                developers {
+//                    developer {
+//                        id 'bertrandmartel'
+//                        name 'Bertrand Martel'
+//                        email 'bmartel.fr@gmail.com'
+//                    }
+//                }
+//                scm {
+//                    connection 'https://github.com/bertrandmartel/speed-test-lib.git'
+//                    developerConnection 'https://github.com/bertrandmartel/speed-test-lib.git'
+//                    url siteUrl
+//                }
+//            }
+//            whenConfigured {
+//                p ->
+//                    p.dependencies = p.dependencies.findAll {
+//                        dep -> (dep.artifactId.notIn(["junit", "concurrentunit", "json-simple", "gson"]))
+//                    }
+//            }
+//        }
+//    }
+//}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            groupId = 'fr.bmartel'
+            artifactId = 'jspeedtest'
+            version = '1.32.1'
+
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = 'jspeedtest'
+                description = 'Speed Test library for Java/Android'
+                url = 'https://github.com/bertrandmartel/speed-test-lib'
                 licenses {
                     license {
-                        name 'The MIT License'
-                        url 'https://github.com/bertrandmartel/speed-test-lib/blob/master/LICENSE.md'
+                        name = 'The MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
                     }
                 }
                 developers {
                     developer {
-                        id 'bertrandmartel'
-                        name 'Bertrand Martel'
-                        email 'bmartel.fr@gmail.com'
+                        id = 'bertrandmartel'
+                        name = 'Bertrand Martel'
+                        email = 'bmartel.fr@gmail.com'
                     }
                 }
                 scm {
-                    connection 'https://github.com/bertrandmartel/speed-test-lib.git'
-                    developerConnection 'https://github.com/bertrandmartel/speed-test-lib.git'
-                    url siteUrl
+                    connection = 'scm:git:https://github.com/bertrandmartel/speed-test-lib.git'
+                    developerConnection = 'scm:git:https://github.com/bertrandmartel/speed-test-lib.git'
+                    url = 'https://github.com/bertrandmartel/speed-test-lib'
                 }
             }
-            whenConfigured {
-                p ->
-                    p.dependencies = p.dependencies.findAll {
-                        dep -> (dep.artifactId.notIn(["junit", "concurrentunit", "json-simple", "gson"]))
-                    }
-            }
+        }
+    }
+
+    repositories {
+        maven {
+            url = "$buildDir/repo"
         }
     }
 }
